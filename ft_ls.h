@@ -6,7 +6,7 @@
 /*   By: qdegraev <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/24 16:24:48 by qdegraev          #+#    #+#             */
-/*   Updated: 2016/02/24 19:06:26 by qdegraev         ###   ########.fr       */
+/*   Updated: 2016/02/25 18:46:16 by qdegraev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 /*
  * stat lstat
 */
-#include <sys/stat.h> 
+#include <sys/stat.h>
 #include <unistd.h>
 
 /*
@@ -40,5 +40,11 @@
 
 typedef		struct dirent t_dirent;
 typedef		struct stat t_stat;
+
+typedef		struct	s_dircont
+{
+	t_dirent		*fich;
+	t_stat			stat;
+}					t_dircont;
 
 #endif
