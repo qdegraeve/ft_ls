@@ -6,7 +6,7 @@
 /*   By: qdegraev <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/24 16:24:48 by qdegraev          #+#    #+#             */
-/*   Updated: 2016/02/25 18:46:16 by qdegraev         ###   ########.fr       */
+/*   Updated: 2016/02/26 19:53:43 by qdegraev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,5 +46,8 @@ typedef		struct	s_dircont
 	t_dirent		*fich;
 	t_stat			stat;
 }					t_dircont;
+
+t_list	*printdir(char *path, DIR *dir, t_list *lst);
+t_list	*read_args(char *av, t_list *lst);
 
 #endif

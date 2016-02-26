@@ -6,65 +6,123 @@
 /*   By: qdegraev <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/24 16:31:35 by qdegraev          #+#    #+#             */
-/*   Updated: 2016/02/25 18:52:23 by qdegraev         ###   ########.fr       */
+/*   Updated: 2016/02/26 19:53:41 by qdegraev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
 
-/*t_stat	*get_stat(t_list *lst)
+void	define_permission(char *perm, mode_t st_mode)
 {
-	t_stat	*stat;
+	int		i;
 
-}*/
+	i = 0;
+	S_IRUSR & st_mode ? perm[++i] = 'r' : perm[++i];
+	S_IWUSR & st_mode ? perm[++i] = 'w' : perm[++i];
+	S_IXUSR & st_mode ? perm[++i] = 'x' : perm[++i];
+	S_IRGRP & st_mode ? perm[++i] = 'r' : perm[++i];
+	S_IWGRP & st_mode ? perm[++i] = 'w' : perm[++i];
+	S_IXGRP & st_mode ? perm[++i] = 'x' : perm[++i];
+	S_IROTH & st_mode ? perm[++i] = 'r' : perm[++i];
+	S_IWOTH & st_mode ? perm[++i] = 'w' : perm[++i];
+	S_IXOTH & st_mode ? perm[++i] = 'x' : perm[++i];
+}
 
-int main(int ac, char**av)
+char	*define_type(mode_t st_mode)
 {
-	DIR			*dir = NULL;
-	t_dirent	*fich = NULL;
+	char	*type;
+	
+	type = ft_strdup("----------");
+	if (S_ISREG(st_mode))
+		*type = '-';
+	else if (S_ISDIR(st_mode))
+		*type = 'd';
+	else if (S_ISFIFO(st_mode))
+		*type = 'p';
+	else if (S_ISSOCK(st_mode))
+		*type = 's';
+	else if (S_ISLNK(st_mode))
+		*type = 'l';
+	else if (S_ISBLK(st_mode))
+		*type = 'b';
+	else if (S_ISCHR(st_mode))
+		*type = 'c';
+	else
+		*type = '?';
+	define_permission(type, st_mode);
+return (type);
+}
+
+
+t_list	*printdir(char *path, DIR *dir, t_list *lst)
+{
+	char	*type;
 	t_dircont	d;
 	t_dircont	*tmp;
-	t_list		*lst = NULL;
-	char *path;
+	char *pat;
 
-	if (ac > 2)
-	{
-		ft_printf("erreur il faut un seul argument et pas %d\n", ac - 1);
-		return (0);
-	}
-	dir = ac == 2 ? opendir(av[1]) : opendir("./");
-	if (dir == NULL)
-	{
-		ft_printf("ls: %s: ", av[1]);
-		perror("");
-		//ft_printf("le dossier n'existe pas\n");
-		return (0);
-	}
-	else
-		ft_printf("dossier ouvert avec succes\n");
+	pat = NULL;
 	while ((d.fich = readdir(dir)))
 	{
-		stat(d.fich->d_name, &d.stat);
-		ft_lstadd_back(&lst, &d, sizeof(d));
+		pat = path[ft_strlen(path) -1] != '/' ? ft_cjoin(ft_strdup(path), ft_strdup("/")) : ft_strdup(path);
+		pat = ft_cjoin(pat, ft_strdup(d.fich->d_name));
+		lstat(pat, &d.stat);
+		type = define_type(d.stat.st_mode);
+		ft_printf("%-15s Nom : %s\n", type, d.fich->d_name);
+		if (type[0] == 'd' && d.fich->d_name[0] != '.')
+			ft_lstadd_back(&lst, pat, ft_strlen(pat) + 1);
+		ft_strdel(&pat);
+		ft_strdel(&type);
 	}
-	while (lst)
-	{
-		tmp = lst->content;
-		ft_printf("Nom : %s \nlongueur : %d\ntype : %-10s\n\n", tmp->fich->d_name, tmp->fich->d_namlen, (S_ISREG(tmp->stat.st_mode)) ?  "regular" :
-				(S_ISDIR(tmp->stat.st_mode)) ?  "directory" :
-				(S_ISFIFO(tmp->stat.st_mode)) ? "FIFO" :
-				(S_ISSOCK(tmp->stat.st_mode)) ? "socket" :
-				(S_ISLNK(tmp->stat.st_mode)) ?  "symlink" :
-				(S_ISBLK(tmp->stat.st_mode)) ?  "block dev" :
-				(S_ISCHR(tmp->stat.st_mode)) ?  "char dev" : "???");
-		lst = lst->next;
-	}
+	return (lst);
+}
 
+t_list	*read_args(char *av, t_list *lst)
+{
+	int i = 0;
+	DIR		*dir = NULL;
+	t_list	*temp;
+	t_dircont	*tmp;
+
+	dir = opendir(av);
+	if (dir == NULL)
+	{
+		ft_printf("ls: %s: ", av);
+		perror("");
+		return (lst);
+	}
+	else
+		ft_printf("dossier \" %s \" ouvert avec succes\n", av);
+	lst = printdir(ft_strdup(av), dir, lst);
+	//	ft_printf("caca[%d]\n", i++);
 	if (closedir(dir) == -1)
 	{
 		ft_printf("%s\n", errno);
-		return (0);
+		return (lst);
 	}
-	ft_printf("dossier ferme avec succes\n");
+	ft_printf("dossier \" %s \" ferme avec succes\n\n\n", av);
+	return (lst);
+}
+
+int main(int ac, char**av)
+{
+	int		i;
+	t_dircont	*tmp;
+	t_list	*lst = NULL;
+
+	i = 0;
+	while (av[i])
+	{
+		lst = ac == 1 ? read_args("./", lst) : i == 0 ? 0 : read_args(av[i], lst);
+		while (lst)
+		{
+			ft_printf("\t\tliste name = %s\n", lst->content);
+			read_args(lst->content, lst);
+			lst = lst->next;
+		}
+		if (ac == 1)
+			break;
+		i++;
+	}
 	return (0);
 }
