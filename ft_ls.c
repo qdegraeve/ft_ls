@@ -6,7 +6,7 @@
 /*   By: qdegraev <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/24 16:31:35 by qdegraev          #+#    #+#             */
-/*   Updated: 2016/02/26 19:53:41 by qdegraev         ###   ########.fr       */
+/*   Updated: 2016/02/29 19:42:21 by qdegraev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ t_list	*printdir(char *path, DIR *dir, t_list *lst)
 		type = define_type(d.stat.st_mode);
 		ft_printf("%-15s Nom : %s\n", type, d.fich->d_name);
 		if (type[0] == 'd' && d.fich->d_name[0] != '.')
-			ft_lstadd_back(&lst, pat, ft_strlen(pat) + 1);
+			ft_lstadd_back(&lst, pat,ft_strlen(pat) + 1);
 		ft_strdel(&pat);
 		ft_strdel(&type);
 	}
