@@ -6,7 +6,7 @@
 /*   By: qdegraev <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/01 00:18:26 by qdegraev          #+#    #+#             */
-/*   Updated: 2016/03/01 01:27:59 by qdegraev         ###   ########.fr       */
+/*   Updated: 2016/03/02 23:57:45 by qdegraev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,13 +30,13 @@ t_list	*ft_lst_insert(t_list *lst, void const *content, size_t cont_size)
 
 void	sort_list(t_list **dir)
 {
-	t_list *tmp;
-	t_list *swap;
-	t_list *swap2;
-	char *caca;
+	t_list	*tmp;
+	t_list	*swap;
+	t_list	*swap2;
+	char	*caca;
 
 	tmp = *dir;
-	while(tmp)
+	while (tmp)
 	{
 		caca = tmp->content;
 		swap = tmp;

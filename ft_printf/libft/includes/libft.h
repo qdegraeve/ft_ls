@@ -6,7 +6,7 @@
 /*   By: afillion <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/29 14:04:50 by afillion          #+#    #+#             */
-/*   Updated: 2016/02/17 16:18:41 by qdegraev         ###   ########.fr       */
+/*   Updated: 2016/03/02 23:22:10 by qdegraev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,6 @@ typedef struct		s_list
 {
 	void			*content;
 	size_t			content_size;
-	char			**tab;
-	char			letter;
 	struct s_list	*next;
 }					t_list;
 

@@ -6,7 +6,7 @@
 /*   By: qdegraev <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/01 00:15:21 by qdegraev          #+#    #+#             */
-/*   Updated: 2016/03/01 00:19:00 by qdegraev         ###   ########.fr       */
+/*   Updated: 2016/03/03 00:05:58 by qdegraev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	define_permission(char *perm, mode_t st_mode)
 char	*define_type(mode_t st_mode)
 {
 	char	*type;
-	
+
 	type = ft_strdup("----------");
 	if (S_ISREG(st_mode))
 		*type = '-';
@@ -50,5 +50,5 @@ char	*define_type(mode_t st_mode)
 	else
 		*type = '?';
 	define_permission(type, st_mode);
-return (type);
+	return (type);
 }
