@@ -6,7 +6,7 @@
 /*   By: qdegraev <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/01 00:21:03 by qdegraev          #+#    #+#             */
-/*   Updated: 2016/03/03 00:04:15 by qdegraev         ###   ########.fr       */
+/*   Updated: 2016/03/03 20:18:20 by qdegraev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,9 @@ void	display_long(t_stat stat, t_dircont d, char *name)
 
 t_list	*print_dir(char *path, t_list *sort, t_list *lst, t_dircont d)
 {
-	d.o->l && d.total ? ft_printf("total %d\n", d.total) : 0;
+	t_list *tmp = NULL;
+	
+	d.o->l ? ft_printf("total %d\n", d.total) : 0;
 	while (sort)
 	{
 		d.path = ft_strjoin(path, "/");
@@ -58,14 +60,15 @@ t_list	*print_dir(char *path, t_list *sort, t_list *lst, t_dircont d)
 		if (d.o->l)
 			display_long(d.stat, d, sort->content);
 		else
-			ft_printf("%*s\n", d.len_max, sort->content);
+			ft_printf("%-*s\n", d.len_max, sort->content);
 		if (d.o->rec && d.type[0] == 'd' && ft_isnavdir(sort->content) == 0)
-			lst = !d.o->a && ft_ishidden(sort->content) ? lst :
-				ft_lst_insert(lst, d.path, ft_strlen(d.path) + 1);
+			!d.o->a && ft_ishidden(sort->content) ? 0 :
+					ft_lstadd_back(&tmp, d.path, ft_strlen(d.path) + 1);
 		ft_strdel(&d.type);
 		ft_strdel(&d.path);
 		sort = sort->next;
 	}
+	tmp ? ft_lst_insert(&lst, tmp) : 0;
 	return (lst);
 }
 

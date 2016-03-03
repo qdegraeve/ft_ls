@@ -6,12 +6,14 @@
 /*   By: qdegraev <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/24 16:24:48 by qdegraev          #+#    #+#             */
-/*   Updated: 2016/03/02 23:55:44 by qdegraev         ###   ########.fr       */
+/*   Updated: 2016/03/03 19:51:51 by qdegraev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef FT_LS_H
 # define FT_LS_H
+
+#include <sys/ioctl.h>
 
 /*
 ** opendir readdir closedir
@@ -42,8 +44,8 @@
 # include <stdlib.h>
 # include "ft_printf/ft_printf.h"
 
-typedef		struct dirent	t_dirent;
-typedef		struct stat		t_stat;
+typedef struct dirent t_dirent;
+typedef struct stat t_stat;
 
 typedef		struct	s_options
 {
@@ -81,8 +83,7 @@ char				*define_type(mode_t st_mode);
 /*
 ** lists tools
 */
-t_list				*ft_lst_insert(t_list *lst, void const *content,
-		size_t cont_size);
+void				ft_lst_insert(t_list **lst, t_list *in);
 void				sort_list(t_list **dir);
 
 #endif

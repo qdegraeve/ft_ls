@@ -6,7 +6,7 @@
 /*   By: qdegraev <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/24 16:31:35 by qdegraev          #+#    #+#             */
-/*   Updated: 2016/03/03 00:05:13 by qdegraev         ###   ########.fr       */
+/*   Updated: 2016/03/03 20:13:59 by qdegraev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ int		check_options(char **av, t_options *o, t_list **lst)
 		}
 		i++;
 	}
-	return (i == 1 ? 0 : i);
+	return (i);
 }
 
 int		main(int ac, char **av)
@@ -62,22 +62,19 @@ int		main(int ac, char **av)
 	t_dircont	d;
 	t_list		*lst;
 
+	lst = NULL;
 	init_options(&o);
-	i = check_options(av, &o, &lst);
+	if ((i = check_options(av, &o, &lst)) == ac)
+		ft_lstadd_back(&lst, "./", 3);
 	d.o = &o;
 	while (av[i])
+		lst =  open_dir(ft_strdup(av[i++]), lst, d);
+	i = 0;
+	while (lst)
 	{
-		lst = ac == 1 ? open_dir(ft_strdup("./"), lst, d) : 0;
-		lst = ac != 1 && i == 0 ? 0 : open_dir(ft_strdup(av[i]), lst, d);
-		while (lst)
-		{
-			ft_printf("\n%s\n", lst->content);
-			open_dir(lst->content, lst, d);
-			lst = lst->next;
-		}
-		if (ac == 1)
-			break ;
-		i++;
+		i++ == 0 ? 0 : ft_printf("\n%s:\n", lst->content);
+		open_dir(lst->content, lst, d);
+		lst = lst->next;
 	}
 	return (0);
 }

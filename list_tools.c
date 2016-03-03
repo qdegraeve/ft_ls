@@ -6,26 +6,30 @@
 /*   By: qdegraev <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/01 00:18:26 by qdegraev          #+#    #+#             */
-/*   Updated: 2016/03/02 23:57:45 by qdegraev         ###   ########.fr       */
+/*   Updated: 2016/03/03 17:56:42 by qdegraev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
 
-t_list	*ft_lst_insert(t_list *lst, void const *content, size_t cont_size)
-{
-	t_list	*new;
 
-	if (!(new = ft_lstnew(content, cont_size)))
-		return (NULL);
-	if (!lst)
-		lst = new;
+
+void	ft_lst_insert(t_list **lst, t_list *in)
+{
+	t_list	*tmp;
+
+	tmp = NULL;
+	if (!*lst)
+		*lst = in;
 	else
 	{
-		new->next = lst->next;
-		lst->next = new;
+		tmp = in;
+		while (tmp->next)
+			tmp = tmp->next;
+		tmp->next = (*lst)->next;
+		(*lst)->next = in;
 	}
-	return (lst);
+	tmp = *lst;
 }
 
 void	sort_list(t_list **dir)
