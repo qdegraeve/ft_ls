@@ -6,11 +6,22 @@
 /*   By: qdegraev <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/24 16:31:35 by qdegraev          #+#    #+#             */
-/*   Updated: 2016/03/03 20:13:59 by qdegraev         ###   ########.fr       */
+/*   Updated: 2016/03/04 13:05:25 by qdegraev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
+
+void	init_display(t_display *d)
+{
+	d->len_max = 0;
+	d->link_max = 0;
+	d->owner_max = 0;
+	d->group_max = 0;
+	d->size_max = 0;
+	d->total = 0;
+
+}
 
 void	init_options(t_options *o)
 {
@@ -59,7 +70,7 @@ int		main(int ac, char **av)
 {
 	int			i;
 	t_options	o;
-	t_dircont	d;
+	t_display	d;
 	t_list		*lst;
 
 	lst = NULL;

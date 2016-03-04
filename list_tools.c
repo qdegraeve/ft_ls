@@ -6,7 +6,7 @@
 /*   By: qdegraev <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/01 00:18:26 by qdegraev          #+#    #+#             */
-/*   Updated: 2016/03/03 17:56:42 by qdegraev         ###   ########.fr       */
+/*   Updated: 2016/03/04 15:06:39 by qdegraev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,8 @@ void	sort_list(t_list **dir)
 	t_list	*tmp;
 	t_list	*swap;
 	t_list	*swap2;
-	char	*caca;
+	t_dircont	*caca;
+	t_dircont	*pipi;
 
 	tmp = *dir;
 	while (tmp)
@@ -47,7 +48,8 @@ void	sort_list(t_list **dir)
 		swap2 = tmp->next;
 		while (swap2)
 		{
-			if (ft_strcmp(caca, swap2->content) > 0)
+			pipi = swap2->content;
+			if (ft_strcmp(caca->name, pipi->name) > 0)
 			{
 				swap = swap2;
 				caca = swap->content;

@@ -6,7 +6,7 @@
 /*   By: qdegraev <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/24 16:24:48 by qdegraev          #+#    #+#             */
-/*   Updated: 2016/03/03 19:51:51 by qdegraev         ###   ########.fr       */
+/*   Updated: 2016/03/04 13:50:14 by qdegraev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,20 +59,28 @@ typedef		struct	s_options
 typedef		struct	s_dircont
 {
 	char			*path;
+	char			*name;
 	char			*type;
-	int				len_max;
-	int				total;
 	t_stat			stat;
-	t_options		*o;
 }					t_dircont;
+
+typedef		struct	s_display
+{
+	int				len_max;
+	int				link_max;
+	int				owner_max;
+	int				group_max;
+	int				size_max;
+	int				total;
+	t_options		*o;
+}					t_display;
 
 /*
 ** read_n_sort
 */
-t_list				*print_dir(char *path, t_list *sort, t_list *lst,
-		t_dircont d);
-t_list				*stockdir(char *path, DIR *dir, t_list *lst, t_dircont d);
-t_list				*open_dir(char *av, t_list *lst, t_dircont d);
+t_list				*print_dir(t_list *sort, t_list *lst, t_display *d);
+t_list				*stockdir(char *path, DIR *dir, t_list *lst, t_display d);
+t_list				*open_dir(char *av, t_list *lst, t_display d);
 
 /*
 ** file type
@@ -85,5 +93,9 @@ char				*define_type(mode_t st_mode);
 */
 void				ft_lst_insert(t_list **lst, t_list *in);
 void				sort_list(t_list **dir);
+
+
+void				init_display(t_display *d);
+int					ft_num_len(size_t num);
 
 #endif
