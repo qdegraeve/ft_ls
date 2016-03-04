@@ -6,7 +6,7 @@
 /*   By: qdegraev <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/24 16:24:48 by qdegraev          #+#    #+#             */
-/*   Updated: 2016/03/04 13:50:14 by qdegraev         ###   ########.fr       */
+/*   Updated: 2016/03/04 20:15:42 by qdegraev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,9 +78,9 @@ typedef		struct	s_display
 /*
 ** read_n_sort
 */
-t_list				*print_dir(t_list *sort, t_list *lst, t_display *d);
-t_list				*stockdir(char *path, DIR *dir, t_list *lst, t_display d);
-t_list				*open_dir(char *av, t_list *lst, t_display d);
+void				print_dir(t_list *sort, t_list *lst, t_display *d);
+void				stockdir(char *path, DIR *dir, t_list *lst, t_display d);
+void				open_dir(char *av, t_list *lst, t_display d);
 
 /*
 ** file type
@@ -92,7 +92,8 @@ char				*define_type(mode_t st_mode);
 ** lists tools
 */
 void				ft_lst_insert(t_list **lst, t_list *in);
-void				sort_list(t_list **dir);
+void				sort_list(t_list **dir, t_options *o);
+void				sort_list_time(t_list **dir, t_options *o);
 
 
 void				init_display(t_display *d);

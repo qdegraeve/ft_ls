@@ -6,7 +6,7 @@
 /*   By: qdegraev <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/24 16:31:35 by qdegraev          #+#    #+#             */
-/*   Updated: 2016/03/04 13:05:25 by qdegraev         ###   ########.fr       */
+/*   Updated: 2016/03/04 18:27:10 by qdegraev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,10 +76,15 @@ int		main(int ac, char **av)
 	lst = NULL;
 	init_options(&o);
 	if ((i = check_options(av, &o, &lst)) == ac)
-		ft_lstadd_back(&lst, "./", 3);
+		ft_lstadd_back(&lst, ".", 2);
+	else
+		while (av[i])
+		{
+			ft_lstadd_back(&lst, ft_strdup(av[i]), ft_strlen(av[i]));
+			i++;
+		}
+	sort_list(&lst, &o);
 	d.o = &o;
-	while (av[i])
-		lst =  open_dir(ft_strdup(av[i++]), lst, d);
 	i = 0;
 	while (lst)
 	{
