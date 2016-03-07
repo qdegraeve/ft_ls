@@ -6,14 +6,14 @@
 /*   By: qdegraev <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/24 16:24:48 by qdegraev          #+#    #+#             */
-/*   Updated: 2016/03/04 20:15:42 by qdegraev         ###   ########.fr       */
+/*   Updated: 2016/03/07 18:50:56 by qdegraev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef FT_LS_H
 # define FT_LS_H
 
-#include <sys/ioctl.h>
+# include <sys/ioctl.h>
 
 /*
 ** opendir readdir closedir
@@ -44,19 +44,22 @@
 # include <stdlib.h>
 # include "ft_printf/ft_printf.h"
 
-typedef struct dirent t_dirent;
-typedef struct stat t_stat;
+typedef struct dirent	t_dirent;
+typedef struct stat		t_stat;
 
-typedef		struct	s_options
+typedef struct		s_options
 {
+	int				l_feed;
+	int				name;
 	char			rec;
 	char			l;
 	char			a;
 	char			r;
 	char			t;
+	char			one;
 }					t_options;
 
-typedef		struct	s_dircont
+typedef struct		s_dircont
 {
 	char			*path;
 	char			*name;
@@ -64,7 +67,7 @@ typedef		struct	s_dircont
 	t_stat			stat;
 }					t_dircont;
 
-typedef		struct	s_display
+typedef struct		s_display
 {
 	int				len_max;
 	int				link_max;
@@ -78,6 +81,7 @@ typedef		struct	s_display
 /*
 ** read_n_sort
 */
+void				display_long(t_dircont *dc, t_display *d);
 void				print_dir(t_list *sort, t_list *lst, t_display *d);
 void				stockdir(char *path, DIR *dir, t_list *lst, t_display d);
 void				open_dir(char *av, t_list *lst, t_display d);
@@ -95,8 +99,8 @@ void				ft_lst_insert(t_list **lst, t_list *in);
 void				sort_list(t_list **dir, t_options *o);
 void				sort_list_time(t_list **dir, t_options *o);
 
-
 void				init_display(t_display *d);
 int					ft_num_len(size_t num);
+void				set_display(t_display *d, t_stat stat, int namlen);
 
 #endif

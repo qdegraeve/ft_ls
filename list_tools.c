@@ -6,13 +6,11 @@
 /*   By: qdegraev <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/01 00:18:26 by qdegraev          #+#    #+#             */
-/*   Updated: 2016/03/04 20:20:39 by qdegraev         ###   ########.fr       */
+/*   Updated: 2016/03/07 20:01:44 by qdegraev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
-
-
 
 void	ft_lst_insert(t_list **lst, t_list *in)
 {
@@ -77,7 +75,7 @@ void	sort_list_time(t_list **dir, t_options *o)
 		swap2 = tmp->next;
 		while (swap2)
 		{
-			if (!o->r ? caca->stat.st_mtime < ((t_dircont*)swap2->content)->stat.st_mtime : caca->stat.st_mtime > ((t_dircont*)swap2->content)->stat.st_mtime)
+			if (!o->r ? caca->stat.st_mtimespec.tv_nsec < ((t_dircont*)swap2->content)->stat.st_mtimespec.tv_nsec : caca->stat.st_mtimespec.tv_nsec > ((t_dircont*)swap2->content)->stat.st_mtimespec.tv_nsec)
 			{
 				swap = swap2;
 				caca = swap->content;

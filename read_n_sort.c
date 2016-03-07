@@ -6,7 +6,7 @@
 /*   By: qdegraev <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/01 00:21:03 by qdegraev          #+#    #+#             */
-/*   Updated: 2016/03/04 20:21:36 by qdegraev         ###   ########.fr       */
+/*   Updated: 2016/03/07 19:44:17 by qdegraev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,11 +44,29 @@ int		ft_ishidden(char *name)
 		return (0);
 }
 
+void	color(t_dircont *dc)
+{
+	if (dc->type[0] == '-')
+		ft_printf("%-s", dc->name);
+	else if (dc->type[0] == 'd')
+		ft_printf("\033[36m%-s\033[0m", dc->name);
+	else if (dc->type[0] == 'l')
+		ft_printf("\033[35m%-s\033[0m", dc->name);
+	else if (dc->type[0] == 'p')
+		ft_printf("%-s", dc->name);
+	else if (dc->type[0] == 'b')
+		ft_printf("\033[7;34;36m%-s\033[0m", dc->name);
+	else if (dc->type[0] == 'l')
+		ft_printf("%-s", dc->name);
+	else if (dc->type[0] == 'c')
+		ft_printf("\033[27;34;43m%-s\033[0m", dc->name);
+}
+
 void	display_long(t_dircont *dc, t_display *d)
 {
-	time_t t;
-	char buff[500];
-	int i;
+	time_t	t;
+	char	buff[500];
+	int		i;
 
 	i = 0;
 	ft_printf("%-12s", dc->type);
@@ -63,7 +81,7 @@ void	display_long(t_dircont *dc, t_display *d)
 	}
 	else
 		ft_printf("%-.12s ", ctime(&t) + 4);
-	ft_printf("%-s", dc->name);
+	color(dc);
 	if (dc->type[0] == 'l' && (i = readlink(dc->path, buff, 500)))
 	{
 		buff[i] = '\0';
@@ -75,9 +93,11 @@ void	display_long(t_dircont *dc, t_display *d)
 
 void	print_dir(t_list *sort, t_list *lst, t_display *d)
 {
-	t_list *tmp = NULL;
+	t_list		*tmp = NULL;
 	t_dircont	*dc;
 
+	d->o->l_feed++ ? ft_printf("\n") : 0;
+	d->o->name++ || !sort ? ft_printf("%s:\n", lst->content) : 0;
 	d->o->l ? ft_printf("total %d\n", d->total) : 0;
 	while (sort)
 	{
@@ -106,7 +126,6 @@ void	set_display(t_display *d, t_stat stat, int namlen)
 		d->group_max = ft_strlen((getgrgid(stat.st_gid))->gr_name);
 	if (d->size_max < ft_num_len(stat.st_size))
 		d->size_max = ft_num_len(stat.st_size);
-
 }
 
 void	stockdir(char *path, DIR *dir, t_list *lst, t_display d)
@@ -118,19 +137,19 @@ void	stockdir(char *path, DIR *dir, t_list *lst, t_display d)
 	init_display(&d);
 	while ((fich = readdir(dir)))
 	{
-		dc.path = ft_strjoin(path, "/");
+		dc.path = ft_strcmp(path, "/") ? ft_strjoin(path, "/") : ft_strdup(path);
 		dc.path = ft_cjoin(dc.path, ft_strdup(fich->d_name));
 		lstat(dc.path, &dc.stat);
 		dc.name = ft_strdup(fich->d_name);
 		dc.type = define_type(dc.stat.st_mode);
-		!d.o->a && ((char*)fich->d_name)[0] == '.' ? 0 : set_display(&d, dc.stat, fich->d_namlen);
+		!d.o->a && ((char*)fich->d_name)[0] == '.' ? 0 :
+			set_display(&d, dc.stat, fich->d_namlen);
 		d.total += !d.o->a && ((char*)fich->d_name)[0] == '.' ? 0 :
 			dc.stat.st_blocks;
-		!d.o->a && ((char*)fich->d_name)[0] == '.' ? 0 : 
+		!d.o->a && ((char*)fich->d_name)[0] == '.' ? 0 :
 			ft_lstadd_back(&sort, &dc, sizeof(dc));
 	}
-	sort_list(&sort, d.o);
-	d.o->t ? sort_list_time(&sort, d.o) : 0;
+	!d.o->t ? sort_list(&sort, d.o) : sort_list_time(&sort, d.o);
 	print_dir(sort, lst, &d);
 }
 
