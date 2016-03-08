@@ -6,7 +6,7 @@
 #    By: qdegraev <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2015/12/07 08:41:32 by qdegraev          #+#    #+#              #
-#    Updated: 2016/03/02 18:23:30 by qdegraev         ###   ########.fr        #
+#    Updated: 2016/03/08 02:10:06 by qdegraev         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,7 +26,9 @@ SRC =  \
 	./define_type.c \
 	./ft_ls.c \
 	./list_tools.c \
-	./read_n_sort.c
+	./read_n_sort.c \
+	./tools.c \
+	./print.c \
 
 OBJ = $(SRC:.c=.o)
 
