@@ -6,7 +6,7 @@
 /*   By: qdegraev <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/08 01:52:30 by qdegraev          #+#    #+#             */
-/*   Updated: 2016/03/08 01:56:30 by qdegraev         ###   ########.fr       */
+/*   Updated: 2016/03/08 20:57:08 by qdegraev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,11 +56,13 @@ void	print_owner_group(t_dircont *dc, t_display *d)
 		ft_printf("%-*s  ", d->group_max, (getgrgid(dc->stat.st_gid))->gr_name);
 }
 
-void	print_time(t_dircont *dc)
+void	print_time(t_dircont *dc, t_display *d)
 {
 	time_t	t;
 
-	if (time(NULL) - (t = dc->stat.st_mtime) > 15778463 || t > time(NULL))
+	if (d->o->T)
+		ft_printf("%-.20s ", ctime(&t) + 4);
+	else if (time(NULL) - (t = dc->stat.st_mtime) > 15778463 || t > time(NULL))
 	{
 		ft_printf("%-.7s ", ctime(&t) + 4);
 		ft_printf("%-.4s ", ctime(&t) + 20);
@@ -80,14 +82,14 @@ void	display_long(t_dircont *dc, t_display *d)
 	ft_printf("%-*d ", d->link_max, dc->stat.st_nlink);
 	print_owner_group(dc, d);
 	print_size(dc, d);
-	print_time(dc);
+	print_time(dc, d);
 	d->o->color ? color(dc) : ft_printf("%-s", dc->name);
 	if (dc->type[0] == 'l' && (i = readlink(dc->path, buff, 1024)))
 	{
 		buff[i] = '\0';
 		ft_printf(" -> %s\n", buff);
-		ft_strdel(&buff);
 	}
 	else
 		ft_printf("\n");
+	ft_strdel(&buff);
 }

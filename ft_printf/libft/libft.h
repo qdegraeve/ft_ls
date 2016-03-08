@@ -6,7 +6,7 @@
 /*   By: qdegraev <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/25 13:07:55 by qdegraev          #+#    #+#             */
-/*   Updated: 2016/02/25 13:08:15 by qdegraev         ###   ########.fr       */
+/*   Updated: 2016/03/08 16:24:38 by qdegraev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ typedef struct		s_list
 	void			*content;
 	size_t			content_size;
 	struct s_list	*next;
+	struct s_list	*prev;
 }					t_list;
 
 void				*ft_memchr(const void *s, int c, size_t n);

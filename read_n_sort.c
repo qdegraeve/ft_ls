@@ -6,7 +6,7 @@
 /*   By: qdegraev <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/01 00:21:03 by qdegraev          #+#    #+#             */
-/*   Updated: 2016/03/08 02:00:19 by qdegraev         ###   ########.fr       */
+/*   Updated: 2016/03/08 20:53:07 by qdegraev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	print_dir(t_list *sort, t_list *lst, t_display *d)
 		if (d->o->rec && dc->type[0] == 'd' && ft_isnavdir(dc->name) == 0)
 			!d->o->a && ft_ishidden(dc->name) ? 0 :
 				ft_lstadd_back(&tmp, dc->path, ft_strlen(dc->path) + 1);
-		sort = sort->next;
+		lst_delone(&sort, del_dircont);
 	}
 	tmp ? ft_lst_insert(&lst, tmp) : 0;
 }
@@ -58,6 +58,8 @@ void	stockdir(char *path, DIR *dir, t_list *lst, t_display d)
 	t_list		*sort;
 	t_dircont	dc;
 
+	sort = NULL;
+	ft_bzero(&dc, sizeof(dc));
 	init_display(&d);
 	while ((fich = readdir(dir)))
 	{
@@ -74,7 +76,7 @@ void	stockdir(char *path, DIR *dir, t_list *lst, t_display d)
 		!d.o->a && ((char*)fich->d_name)[0] == '.' ? 0 :
 			ft_lstadd_back(&sort, &dc, sizeof(dc));
 	}
-	!d.o->t ? sort_list(&sort, d.o) : sort_list_time(&sort, d.o);
+	sort_select(&sort, d.o);
 	print_dir(sort, lst, &d);
 }
 

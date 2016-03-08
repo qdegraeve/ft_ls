@@ -6,7 +6,7 @@
 /*   By: qdegraev <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/24 16:24:48 by qdegraev          #+#    #+#             */
-/*   Updated: 2016/03/08 02:00:11 by qdegraev         ###   ########.fr       */
+/*   Updated: 2016/03/08 19:51:08 by qdegraev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,8 @@ typedef struct		s_options
 	char			a;
 	char			r;
 	char			t;
+	char			T;
+	char			u;
 	char			one;
 	char			color;
 }					t_options;
@@ -81,13 +83,19 @@ typedef struct		s_display
 }					t_display;
 
 /*
-** print
+** options
 */
-void				color(t_dircont *dc);
-void				print_size(t_dircont *dc, t_display *d);
-void				print_owner_group(t_dircont *dc, t_display *d);
-void				print_time(t_dircont *dc);
-void				display_long(t_dircont *dc, t_display *d);
+void				init_options(t_options *o);
+void				set_options(char option, t_options *o);
+int					check_options(char **av, t_options *o);
+
+/*
+** get_argv
+*/
+void				print_params(t_list *tmp, t_list **lst, t_display *d);
+void				filter_params(t_list *sort, t_list **lst, t_display *d);
+void				sort_params(char **av, t_list **lst, t_options *o,
+		t_display d);
 
 /*
 ** read_n_sort
@@ -99,6 +107,15 @@ void				set_display(t_display *d, t_stat stat, int namlen,
 		char type);
 
 /*
+** print
+*/
+void				color(t_dircont *dc);
+void				print_size(t_dircont *dc, t_display *d);
+void				print_owner_group(t_dircont *dc, t_display *d);
+void				print_time(t_dircont *dc, t_display *d);
+void				display_long(t_dircont *dc, t_display *d);
+
+/*
 ** file type
 */
 void				define_permission(char *perm, mode_t st_mode);
@@ -107,9 +124,20 @@ char				*define_type(mode_t st_mode);
 /*
 ** lists tools
 */
+void				sort_select(t_list **dir, t_options *o);
+void				sort_list(t_list **dir, t_options *o,
+		int (*sort)(t_dircont *, void *, t_options *));
+int					sort_ascii(t_dircont *c1, void *c2, t_options *o);
+int					sort_mod_time(t_dircont *c1, void *c2, t_options *o);
+int					sort_access_time(t_dircont *c1, void *c2, t_options *o);
+
+/*
+** Mr Proper
+*/
 void				ft_lst_insert(t_list **lst, t_list *in);
-void				sort_list(t_list **dir, t_options *o);
-void				sort_list_time(t_list **dir, t_options *o);
+void				lst_delone(t_list **lst, void (*del)(void **));
+void				del_dircont(void **to_del);
+void				del_string(void **to_del);
 
 /*
 ** tools
@@ -118,6 +146,5 @@ void				init_display(t_display *d);
 int					ft_num_len(size_t num);
 int					ft_isnavdir(char *name);
 int					ft_ishidden(char *name);
-void				del_listone(t_list **sort);
 
 #endif
