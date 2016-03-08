@@ -6,7 +6,7 @@
 /*   By: qdegraev <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/24 16:24:48 by qdegraev          #+#    #+#             */
-/*   Updated: 2016/03/07 18:50:56 by qdegraev         ###   ########.fr       */
+/*   Updated: 2016/03/08 02:00:11 by qdegraev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ typedef struct		s_options
 	char			r;
 	char			t;
 	char			one;
+	char			color;
 }					t_options;
 
 typedef struct		s_dircont
@@ -69,6 +70,7 @@ typedef struct		s_dircont
 
 typedef struct		s_display
 {
+	int				sys;
 	int				len_max;
 	int				link_max;
 	int				owner_max;
@@ -79,12 +81,22 @@ typedef struct		s_display
 }					t_display;
 
 /*
+** print
+*/
+void				color(t_dircont *dc);
+void				print_size(t_dircont *dc, t_display *d);
+void				print_owner_group(t_dircont *dc, t_display *d);
+void				print_time(t_dircont *dc);
+void				display_long(t_dircont *dc, t_display *d);
+
+/*
 ** read_n_sort
 */
-void				display_long(t_dircont *dc, t_display *d);
 void				print_dir(t_list *sort, t_list *lst, t_display *d);
 void				stockdir(char *path, DIR *dir, t_list *lst, t_display d);
 void				open_dir(char *av, t_list *lst, t_display d);
+void				set_display(t_display *d, t_stat stat, int namlen,
+		char type);
 
 /*
 ** file type
@@ -99,8 +111,13 @@ void				ft_lst_insert(t_list **lst, t_list *in);
 void				sort_list(t_list **dir, t_options *o);
 void				sort_list_time(t_list **dir, t_options *o);
 
+/*
+** tools
+*/
 void				init_display(t_display *d);
 int					ft_num_len(size_t num);
-void				set_display(t_display *d, t_stat stat, int namlen);
+int					ft_isnavdir(char *name);
+int					ft_ishidden(char *name);
+void				del_listone(t_list **sort);
 
 #endif

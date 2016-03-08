@@ -6,98 +6,20 @@
 /*   By: qdegraev <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/01 00:21:03 by qdegraev          #+#    #+#             */
-/*   Updated: 2016/03/07 19:44:17 by qdegraev         ###   ########.fr       */
+/*   Updated: 2016/03/08 02:00:19 by qdegraev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
 
-int		ft_num_len(size_t num)
-{
-	int		i;
-
-	i = 0;
-	if (num == 0)
-		return (0);
-	while ((num = num / 10))
-		i++;
-	return (i + 1);
-}
-
-int		ft_isnavdir(char *name)
-{
-	if (!name)
-		return (0);
-	if (name[0] == '.' && (!name[1] || name[1] == '.'))
-		return (1);
-	else
-		return (0);
-}
-
-int		ft_ishidden(char *name)
-{
-	if (!name)
-		return (0);
-	if (name[0] == '.' && !ft_isnavdir(name))
-		return (1);
-	else
-		return (0);
-}
-
-void	color(t_dircont *dc)
-{
-	if (dc->type[0] == '-')
-		ft_printf("%-s", dc->name);
-	else if (dc->type[0] == 'd')
-		ft_printf("\033[36m%-s\033[0m", dc->name);
-	else if (dc->type[0] == 'l')
-		ft_printf("\033[35m%-s\033[0m", dc->name);
-	else if (dc->type[0] == 'p')
-		ft_printf("%-s", dc->name);
-	else if (dc->type[0] == 'b')
-		ft_printf("\033[7;34;36m%-s\033[0m", dc->name);
-	else if (dc->type[0] == 'l')
-		ft_printf("%-s", dc->name);
-	else if (dc->type[0] == 'c')
-		ft_printf("\033[27;34;43m%-s\033[0m", dc->name);
-}
-
-void	display_long(t_dircont *dc, t_display *d)
-{
-	time_t	t;
-	char	buff[500];
-	int		i;
-
-	i = 0;
-	ft_printf("%-12s", dc->type);
-	ft_printf("%-*d ", d->link_max, dc->stat.st_nlink);
-	ft_printf("%-*s  ", d->owner_max, (getpwuid(dc->stat.st_uid))->pw_name);
-	ft_printf("%-*s  ", d->group_max, (getgrgid(dc->stat.st_gid))->gr_name);
-	ft_printf("%*d ", d->size_max, dc->stat.st_size);
-	if (ft_abs(time(NULL) - (t = dc->stat.st_mtime)) > 15778463)
-	{
-		ft_printf("%-.7s ", ctime(&t) + 4);
-		ft_printf("%-.4s ", ctime(&t) + 20);
-	}
-	else
-		ft_printf("%-.12s ", ctime(&t) + 4);
-	color(dc);
-	if (dc->type[0] == 'l' && (i = readlink(dc->path, buff, 500)))
-	{
-		buff[i] = '\0';
-		ft_printf(" -> %s\n", buff);
-	}
-	else
-		ft_printf("\n");
-}
-
 void	print_dir(t_list *sort, t_list *lst, t_display *d)
 {
-	t_list		*tmp = NULL;
+	t_list		*tmp;
 	t_dircont	*dc;
 
+	tmp = NULL;
 	d->o->l_feed++ ? ft_printf("\n") : 0;
-	d->o->name++ || !sort ? ft_printf("%s:\n", lst->content) : 0;
+	d->o->name++ ? ft_printf("%s:\n", lst->content) : 0;
 	d->o->l ? ft_printf("total %d\n", d->total) : 0;
 	while (sort)
 	{
@@ -114,7 +36,7 @@ void	print_dir(t_list *sort, t_list *lst, t_display *d)
 	tmp ? ft_lst_insert(&lst, tmp) : 0;
 }
 
-void	set_display(t_display *d, t_stat stat, int namlen)
+void	set_display(t_display *d, t_stat stat, int namlen, char type)
 {
 	if (d->len_max < namlen)
 		d->len_max = namlen;
@@ -126,6 +48,8 @@ void	set_display(t_display *d, t_stat stat, int namlen)
 		d->group_max = ft_strlen((getgrgid(stat.st_gid))->gr_name);
 	if (d->size_max < ft_num_len(stat.st_size))
 		d->size_max = ft_num_len(stat.st_size);
+	if (type == 'b' || type == 'c')
+		d->sys = 1;
 }
 
 void	stockdir(char *path, DIR *dir, t_list *lst, t_display d)
@@ -137,13 +61,14 @@ void	stockdir(char *path, DIR *dir, t_list *lst, t_display d)
 	init_display(&d);
 	while ((fich = readdir(dir)))
 	{
-		dc.path = ft_strcmp(path, "/") ? ft_strjoin(path, "/") : ft_strdup(path);
+		dc.path = ft_strcmp(path, "/") ? ft_strjoin(path, "/") :
+			ft_strdup(path);
 		dc.path = ft_cjoin(dc.path, ft_strdup(fich->d_name));
 		lstat(dc.path, &dc.stat);
 		dc.name = ft_strdup(fich->d_name);
 		dc.type = define_type(dc.stat.st_mode);
 		!d.o->a && ((char*)fich->d_name)[0] == '.' ? 0 :
-			set_display(&d, dc.stat, fich->d_namlen);
+			set_display(&d, dc.stat, fich->d_namlen, dc.type[0]);
 		d.total += !d.o->a && ((char*)fich->d_name)[0] == '.' ? 0 :
 			dc.stat.st_blocks;
 		!d.o->a && ((char*)fich->d_name)[0] == '.' ? 0 :
