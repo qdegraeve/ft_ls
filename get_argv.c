@@ -6,7 +6,7 @@
 /*   By: qdegraev <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/08 16:14:47 by qdegraev          #+#    #+#             */
-/*   Updated: 2016/03/08 19:51:10 by qdegraev         ###   ########.fr       */
+/*   Updated: 2016/03/09 18:27:00 by qdegraev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ void	filter_params(t_list *sort, t_list **lst, t_display *d)
 		}
 		sort = sort->next;
 	}
+	sort_select(&tmp, d->o);
 	print_params(tmp, lst, d);
 }
 
@@ -84,6 +85,6 @@ void	sort_params(char **av, t_list **lst, t_options *o, t_display d)
 		ft_lstadd_back(&sort, &dc, sizeof(dc));
 		i++;
 	}
-	sort_select(&sort, d.o);
+	sort_list(&sort, 0, sort_ascii);
 	filter_params(sort, lst, &d);
 }

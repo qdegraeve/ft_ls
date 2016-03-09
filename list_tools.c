@@ -6,38 +6,74 @@
 /*   By: qdegraev <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/01 00:18:26 by qdegraev          #+#    #+#             */
-/*   Updated: 2016/03/08 19:26:05 by qdegraev         ###   ########.fr       */
+/*   Updated: 2016/03/09 19:43:26 by qdegraev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
 
-int		sort_ascii(t_dircont *c1, void *c2, t_options *o)
+int		sort_ascii(t_dircont *c1, void *c2, int o)
 {
-	if (o->r)
+	if (o)
+	{
 		return (ft_strcmp(((t_dircont*)c2)->name, c1->name));
+	}
 	else
+	{
 		return (ft_strcmp(c1->name, ((t_dircont*)c2)->name));
+	}
 }
 
-int		sort_mod_time(t_dircont *c1, void *c2, t_options *o)
+int sort_mod_time(t_dircont *c1, void *c2, int o)
 {
-	if (o->r)
-		return (c1->stat.st_mtime - ((t_dircont*)c2)->stat.st_mtime);
+	long int	l1;
+	long int	l2;
+	int			diff;
+
+	l1 = (c1->stat.st_mtimespec).tv_nsec;
+	l2 = (((t_dircont*)c2)->stat.st_mtimespec).tv_nsec;
+	if (o)
+	{
+		if ((diff = c1->stat.st_mtime - ((t_dircont*)c2)->stat.st_mtime) == 0)
+			return (l1 != l2 ? (l1 - l2) : sort_ascii(c1, c2, o));
+		else
+			return (diff);
+	}
 	else
-		return (((t_dircont*)c2)->stat.st_mtime - c1->stat.st_mtime);
+	{
+		if ((diff = ((t_dircont*)c2)->stat.st_mtime - c1->stat.st_mtime) == 0)
+			return (l1 != l2 ? (l2 - l1) : sort_ascii(c1, c2, o));
+		else
+			return (diff);
+	}
 }
 
-int		sort_access_time(t_dircont *c1, void *c2, t_options *o)
+int		sort_access_time(t_dircont *c1, void *c2, int o)
 {
-	if (o->r)
-		return (c1->stat.st_atime - ((t_dircont*)c2)->stat.st_atime);
+	long int	l1;
+	long int	l2;
+	int			diff;
+
+	l1 = (c1->stat.st_atimespec).tv_nsec;
+	l2 = (((t_dircont*)c2)->stat.st_atimespec).tv_nsec;
+	if (o)
+	{
+		if ((diff = c1->stat.st_atime - ((t_dircont*)c2)->stat.st_atime) == 0)
+			return (l1 != l2 ? (l1 - l2) : sort_ascii(c1, c2, o));
+		else
+			return (diff);
+	}
 	else
-		return (((t_dircont*)c2)->stat.st_atime - c1->stat.st_atime);
+	{
+		if ((diff = ((t_dircont*)c2)->stat.st_atime - c1->stat.st_atime) == 0)
+			return (l1 != l2 ? (l2 - l1) : sort_ascii(c1, c2, o));
+		else
+			return (diff);
+	}
 }
 
-void	sort_list(t_list **dir, t_options *o, int (*sort)(t_dircont *, void *,
-			t_options *))
+void	sort_list(t_list **dir, int o, int (*sort)(t_dircont *,
+			void *, int))
 {
 	t_list		*tmp;
 	t_list		*swap2;
@@ -60,8 +96,9 @@ void	sort_list(t_list **dir, t_options *o, int (*sort)(t_dircont *, void *,
 
 void	sort_select(t_list **dir, t_options *o)
 {
-	sort_list(dir, o, sort_ascii);
-	if (o->t)
-		!o->u ? sort_list(dir, o, sort_mod_time) :
-			sort_list(dir, o, sort_access_time);
+	if (!o->t)
+		sort_list(dir, o->r, sort_ascii);
+	else
+		!o->u ? sort_list(dir, o->r, sort_mod_time) :
+			sort_list(dir, o->r, sort_access_time);
 }

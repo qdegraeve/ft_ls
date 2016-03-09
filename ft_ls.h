@@ -6,7 +6,7 @@
 /*   By: qdegraev <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/24 16:24:48 by qdegraev          #+#    #+#             */
-/*   Updated: 2016/03/08 19:51:08 by qdegraev         ###   ########.fr       */
+/*   Updated: 2016/03/09 18:05:59 by qdegraev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,19 +125,19 @@ char				*define_type(mode_t st_mode);
 ** lists tools
 */
 void				sort_select(t_list **dir, t_options *o);
-void				sort_list(t_list **dir, t_options *o,
-		int (*sort)(t_dircont *, void *, t_options *));
-int					sort_ascii(t_dircont *c1, void *c2, t_options *o);
-int					sort_mod_time(t_dircont *c1, void *c2, t_options *o);
-int					sort_access_time(t_dircont *c1, void *c2, t_options *o);
+void				sort_list(t_list **dir, int o,
+		int (*sort)(t_dircont *, void *, int));
+int					sort_ascii(t_dircont *c1, void *c2, int o);
+int			sort_mod_time(t_dircont *c1, void *c2, int o);
+int					sort_access_time(t_dircont *c1, void *c2, int o);
 
 /*
 ** Mr Proper
 */
 void				ft_lst_insert(t_list **lst, t_list *in);
-void				lst_delone(t_list **lst, void (*del)(void **));
-void				del_dircont(void **to_del);
-void				del_string(void **to_del);
+void				lst_delone(t_list **lst, void (*del)(void *));
+void				del_dircont(void *to_del);
+void				del_string(void *to_del);
 
 /*
 ** tools

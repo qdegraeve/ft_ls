@@ -6,7 +6,7 @@
 /*   By: qdegraev <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/08 16:18:40 by qdegraev          #+#    #+#             */
-/*   Updated: 2016/03/08 21:13:48 by qdegraev         ###   ########.fr       */
+/*   Updated: 2016/03/09 16:49:41 by qdegraev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ void	init_options(t_options *o)
 	o->t = 0;
 	o->T = 0;
 	o->u = 0;
+	o->color = 0;
 }
 
 void	set_options(char option, t_options *o)

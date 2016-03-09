@@ -6,7 +6,7 @@
 /*   By: qdegraev <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/08 01:52:30 by qdegraev          #+#    #+#             */
-/*   Updated: 2016/03/08 20:57:08 by qdegraev         ###   ########.fr       */
+/*   Updated: 2016/03/09 20:08:16 by qdegraev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,31 +44,38 @@ void	print_size(t_dircont *dc, t_display *d)
 
 void	print_owner_group(t_dircont *dc, t_display *d)
 {
-	char *name;
+	struct group	*gr;
+	struct passwd	*pwd;
 
-	if (!(name = (getpwuid(dc->stat.st_uid))->pw_name))
-		ft_printf("%-*d  ", d->owner_max, dc->stat.st_uid);
+	pwd = getpwuid(dc->stat.st_uid);
+	gr = getgrgid(dc->stat.st_gid);
+	if (!pwd || pwd->pw_name == NULL)
+		ft_printf("%*d  ", d->owner_max, dc->stat.st_uid);
 	else
-		ft_printf("%-*s  ", d->owner_max, (getpwuid(dc->stat.st_uid))->pw_name);
-	if (!(name = (getgrgid(dc->stat.st_gid))->gr_name))
-		ft_printf("%-*d  ", d->owner_max, dc->stat.st_uid);
+		ft_printf("%-*s  ", d->owner_max, pwd->pw_name);
+	if (!gr || pwd->pw_name == NULL)
+		ft_printf("%*d  ", d->group_max, dc->stat.st_gid);
 	else
-		ft_printf("%-*s  ", d->group_max, (getgrgid(dc->stat.st_gid))->gr_name);
+		ft_printf("%-*s  ", d->group_max, gr->gr_name);
 }
 
 void	print_time(t_dircont *dc, t_display *d)
 {
 	time_t	t;
+	char	*st;
 
+	t = !d->o->u ? (dc->stat.st_mtimespec).tv_sec :
+		(dc->stat.st_atimespec).tv_sec;
+	st = ctime(&t);
 	if (d->o->T)
-		ft_printf("%-.20s ", ctime(&t) + 4);
-	else if (time(NULL) - (t = dc->stat.st_mtime) > 15778463 || t > time(NULL))
+		ft_printf("%-.20s ", st + 4);
+	else if (time(NULL) - t >= 15778463 || t > time(NULL))
 	{
-		ft_printf("%-.7s ", ctime(&t) + 4);
-		ft_printf("%-.4s ", ctime(&t) + 20);
+		ft_printf("%-.7s ", st + 4);
+		ft_printf("%-.4s ", st + 20);
 	}
 	else
-		ft_printf("%-.12s ", ctime(&t) + 4);
+		ft_printf("%-.12s ", st + 4);
 }
 
 void	display_long(t_dircont *dc, t_display *d)
