@@ -6,7 +6,7 @@
 /*   By: qdegraev <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/08 01:52:30 by qdegraev          #+#    #+#             */
-/*   Updated: 2016/03/09 20:08:16 by qdegraev         ###   ########.fr       */
+/*   Updated: 2016/03/10 17:46:30 by qdegraev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,14 +84,14 @@ void	display_long(t_dircont *dc, t_display *d)
 	int		i;
 
 	i = 0;
-	buff = (char*)malloc(1024);
+	buff = (char*)malloc(255);
 	ft_printf("%-12s", dc->type);
-	ft_printf("%-*d ", d->link_max, dc->stat.st_nlink);
+	ft_printf("%*d ", d->link_max, dc->stat.st_nlink);
 	print_owner_group(dc, d);
 	print_size(dc, d);
 	print_time(dc, d);
 	d->o->color ? color(dc) : ft_printf("%-s", dc->name);
-	if (dc->type[0] == 'l' && (i = readlink(dc->path, buff, 1024)))
+	if (dc->type[0] == 'l' && (i = readlink(dc->path, buff, 255)))
 	{
 		buff[i] = '\0';
 		ft_printf(" -> %s\n", buff);

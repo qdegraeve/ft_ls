@@ -6,7 +6,7 @@
 /*   By: qdegraev <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/01 00:18:26 by qdegraev          #+#    #+#             */
-/*   Updated: 2016/03/09 19:43:26 by qdegraev         ###   ########.fr       */
+/*   Updated: 2016/03/10 18:56:08 by qdegraev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,20 +59,49 @@ int		sort_access_time(t_dircont *c1, void *c2, int o)
 	if (o)
 	{
 		if ((diff = c1->stat.st_atime - ((t_dircont*)c2)->stat.st_atime) == 0)
-			return (l1 != l2 ? (l1 - l2) : sort_ascii(c1, c2, o));
+				return (l1 != l2 ? (l1 - l2) : sort_ascii(c1, c2, o));
+			else
+				return (diff);
+		}
 		else
-			return (diff);
+		{
+			if ((diff = ((t_dircont*)c2)->stat.st_atime - c1->stat.st_atime) == 0)
+				return (l1 != l2 ? (l2 - l1) : sort_ascii(c1, c2, o));
+			else
+				return (diff);
+		}
 	}
-	else
-	{
-		if ((diff = ((t_dircont*)c2)->stat.st_atime - c1->stat.st_atime) == 0)
-			return (l1 != l2 ? (l2 - l1) : sort_ascii(c1, c2, o));
-		else
-			return (diff);
-	}
-}
 
 void	sort_list(t_list **dir, int o, int (*sort)(t_dircont *,
+			void *, int))
+{
+	t_list		*tmp;
+	t_list		*swap2;
+	t_dircont	*dc;
+
+	tmp = *dir;
+	swap2 = NULL;
+	if (!tmp || !tmp->next)
+		return ;
+	swap2 = tmp->next;
+	while (swap2)
+	{
+		dc = tmp->content;
+		if (sort(dc, swap2->content, o) > 0)
+		{
+			tmp->content = swap2->content;
+			swap2->content = dc;
+			tmp = *dir;
+			swap2 = tmp->next;
+		}
+		else
+		{
+			tmp = tmp->next;
+			swap2 = tmp->next;
+		}
+	}
+}
+/*void	sort_list(t_list **dir, int o, int (*sort)(t_dircont *,
 			void *, int))
 {
 	t_list		*tmp;
@@ -92,7 +121,7 @@ void	sort_list(t_list **dir, int o, int (*sort)(t_dircont *,
 		}
 		tmp = tmp->next;
 	}
-}
+}*/
 
 void	sort_select(t_list **dir, t_options *o)
 {

@@ -6,7 +6,7 @@
 /*   By: qdegraev <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/01 00:21:03 by qdegraev          #+#    #+#             */
-/*   Updated: 2016/03/09 20:02:16 by qdegraev         ###   ########.fr       */
+/*   Updated: 2016/03/10 17:39:08 by qdegraev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	print_dir(t_list *sort, t_list *lst, t_display *d)
 	tmp = NULL;
 	d->o->l_feed++ ? ft_printf("\n") : 0;
 	d->o->name++ ? ft_printf("%s:\n", lst->content) : 0;
-	d->o->l ? ft_printf("total %d\n", d->total) : 0;
+	!d->o->l || !sort  ? 0 : ft_printf("total %d\n", d->total);
 	while (sort)
 	{
 		dc = sort->content;
@@ -96,6 +96,8 @@ void	open_dir(char *av, t_list *lst, t_display d)
 	dir = opendir(av);
 	if (dir == NULL)
 	{
+		d.o->l_feed++ ? ft_printf("\n") : 0;
+		d.o->name++ ? ft_printf("%s:\n", lst->content) : 0;
 		ft_printf("ls: %s: ", av);
 		perror("");
 		return ;

@@ -6,22 +6,42 @@
 /*   By: qdegraev <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/08 16:14:47 by qdegraev          #+#    #+#             */
-/*   Updated: 2016/03/09 18:27:00 by qdegraev         ###   ########.fr       */
+/*   Updated: 2016/03/10 18:56:06 by qdegraev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
 
+void	type_l(t_dircont *dc)
+{
+	char		*buff;
+	int			i;
+	t_stat		stat;
+
+	i = 0;
+	buff = (char*)malloc(255);
+	if ((i = readlink(dc->name, buff, 255)))
+		buff[i] = '\0';
+	if (lstat(buff, &stat) != 0)
+	{
+		ft_printf("ls: %s: ", buff);
+		perror("");
+	}
+	if (!S_ISDIR(stat.st_mode))
+		dc->type[0] = '-';
+	ft_strdel(&buff);
+}
+
 void	print_params(t_list *tmp, t_list **lst, t_display *d)
 {
 	t_dircont	*dc;
-	int			i;
 
-	i = 0;
 	while (tmp)
 	{
 		dc = tmp->content;
-		if (dc->type[0] == 'd')
+		if (dc->type[0] == 'l' && !d->o->l)
+			type_l(dc);
+		if (dc->type[0] == 'd' || (dc->type[0] == 'l' && !d->o->l))
 			ft_lstadd_back(lst, dc->name, ft_strlen(dc->name) + 1);
 		else
 		{
@@ -80,8 +100,8 @@ void	sort_params(char **av, t_list **lst, t_options *o, t_display d)
 			exit(EXIT_FAILURE);
 		}
 		dc.name = ft_strdup(av[i]);
+		dc.path = ft_strdup(av[i]);
 		dc.type = define_type(dc.stat.st_mode);
-		dc.path = NULL;
 		ft_lstadd_back(&sort, &dc, sizeof(dc));
 		i++;
 	}
