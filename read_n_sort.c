@@ -6,7 +6,7 @@
 /*   By: qdegraev <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/01 00:21:03 by qdegraev          #+#    #+#             */
-/*   Updated: 2016/03/10 17:39:08 by qdegraev         ###   ########.fr       */
+/*   Updated: 2016/03/11 15:34:59 by qdegraev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,10 +82,9 @@ void	stockdir(char *path, DIR *dir, t_list *lst, t_display d)
 			dc.type = define_type(dc.stat.st_mode);
 			set_display(&d, dc.stat, fich->d_namlen, dc.type[0]);
 			d.total += dc.stat.st_blocks;
-			ft_lstadd_back(&sort, &dc, sizeof(dc));
+			sort_select(&sort, &dc, sizeof(dc), d.o);
 		}
 	}
-	sort_select(&sort, d.o);
 	print_dir(sort, lst, &d);
 }
 
@@ -98,14 +97,14 @@ void	open_dir(char *av, t_list *lst, t_display d)
 	{
 		d.o->l_feed++ ? ft_printf("\n") : 0;
 		d.o->name++ ? ft_printf("%s:\n", lst->content) : 0;
-		ft_printf("ls: %s: ", av);
-		perror("");
+		ft_putstr_fd("ls: ", 2);
+		perror(av);
 		return ;
 	}
 	stockdir(av, dir, lst, d);
 	if (closedir(dir) == -1)
 	{
-		ft_printf("%s\n", errno);
+		perror(strerror(errno));
 		return ;
 	}
 }

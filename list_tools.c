@@ -6,7 +6,7 @@
 /*   By: qdegraev <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/01 00:18:26 by qdegraev          #+#    #+#             */
-/*   Updated: 2016/03/10 18:56:08 by qdegraev         ###   ########.fr       */
+/*   Updated: 2016/03/11 16:26:31 by qdegraev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,33 +101,24 @@ void	sort_list(t_list **dir, int o, int (*sort)(t_dircont *,
 		}
 	}
 }
-/*void	sort_list(t_list **dir, int o, int (*sort)(t_dircont *,
-			void *, int))
-{
-	t_list		*tmp;
-	t_list		*swap2;
-	t_dircont	*dc;
 
-	tmp = *dir;
-	while (tmp)
-	{
-		dc = tmp->content;
-		swap2 = tmp->next;
-		while (swap2 && sort(dc, swap2->content, o) > 0)
-		{
-			tmp->content = swap2->content;
-			tmp->next->content = dc;
-			return (sort_list(dir, o, sort));
-		}
-		tmp = tmp->next;
-	}
-}*/
-
-void	sort_select(t_list **dir, t_options *o)
+void	sort_select(t_list **dir, void *content, size_t cont_size, t_options *o)
 {
-	if (!o->t)
-		sort_list(dir, o->r, sort_ascii);
+	t_list	*new;
+
+	new = NULL;
+	if (!(new = ft_lstnew(content, cont_size)))
+		return ;
+	if (!(*dir))
+		*dir = new;
 	else
-		!o->u ? sort_list(dir, o->r, sort_mod_time) :
-			sort_list(dir, o->r, sort_access_time);
+	{
+		if (!o->t)
+		{
+			ft_lst_sortinsert(dir, new, o->r, sort_ascii);
+		}
+		else
+			!o->u ? ft_lst_sortinsert(dir, new, o->r, sort_mod_time) :
+				ft_lst_sortinsert(dir, new, o->r, sort_access_time);
+	}
 }

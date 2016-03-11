@@ -6,7 +6,7 @@
 /*   By: qdegraev <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/08 16:18:40 by qdegraev          #+#    #+#             */
-/*   Updated: 2016/03/09 16:49:41 by qdegraev         ###   ########.fr       */
+/*   Updated: 2016/03/11 12:58:16 by qdegraev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,10 @@ void	set_options(char option, t_options *o)
 	if (option == 'R')
 		o->rec = 1;
 	else if (option == 'l')
+	{
 		o->l = 1;
+		o->one = 0;
+	}
 	else if (option == 'a')
 		o->a = 1;
 	else if (option == 'r')
@@ -43,7 +46,10 @@ void	set_options(char option, t_options *o)
 	else if (option == 'u')
 		o->u = 1;
 	else if (option == '1')
+	{
+		o->l = 0;
 		o->one = 1;
+	}
 	else
 	{
 		ft_printf("ls: illegal option -- %c\n", option);

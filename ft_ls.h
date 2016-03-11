@@ -6,7 +6,7 @@
 /*   By: qdegraev <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/24 16:24:48 by qdegraev          #+#    #+#             */
-/*   Updated: 2016/03/10 15:57:57 by qdegraev         ###   ########.fr       */
+/*   Updated: 2016/03/11 15:37:41 by qdegraev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,16 +124,19 @@ char				*define_type(mode_t st_mode);
 /*
 ** lists tools
 */
-void				sort_select(t_list **dir, t_options *o);
+void				sort_select(t_list **dir, void *content, size_t cont_size,
+		t_options *o);
 void				sort_list(t_list **dir, int o,
 		int (*sort)(t_dircont *, void *, int));
 int					sort_ascii(t_dircont *c1, void *c2, int o);
-int			sort_mod_time(t_dircont *c1, void *c2, int o);
+int					sort_mod_time(t_dircont *c1, void *c2, int o);
 int					sort_access_time(t_dircont *c1, void *c2, int o);
 
 /*
 ** Mr Proper
 */
+void				ft_lst_sortinsert(t_list **beg_lst, t_list *new, int o,
+		int (*sort)(t_dircont *, void *, int));
 void				ft_lst_insert(t_list **lst, t_list *in);
 void				lst_delone(t_list **lst, void (*del)(void *));
 void				del_dircont(void *to_del);

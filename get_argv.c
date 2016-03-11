@@ -6,7 +6,7 @@
 /*   By: qdegraev <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/08 16:14:47 by qdegraev          #+#    #+#             */
-/*   Updated: 2016/03/10 18:56:06 by qdegraev         ###   ########.fr       */
+/*   Updated: 2016/03/11 17:44:07 by qdegraev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,7 @@ void	type_l(t_dircont *dc)
 	if ((i = readlink(dc->name, buff, 255)))
 		buff[i] = '\0';
 	if (lstat(buff, &stat) != 0)
-	{
-		ft_printf("ls: %s: ", buff);
-		perror("");
-	}
+		dc->type[0] = '-';
 	if (!S_ISDIR(stat.st_mode))
 		dc->type[0] = '-';
 	ft_strdel(&buff);
@@ -62,23 +59,23 @@ void	filter_params(t_list *sort, t_list **lst, t_display *d)
 	t_stat		stat;
 
 	tmp = NULL;
+	ft_bzero(&dc, sizeof(dc));
 	while (sort)
 	{
 		dc = sort->content;
 		if (lstat(dc->name, &stat) != 0)
 		{
-			ft_printf("ls: %s: ", dc->name);
-			perror("");
+			ft_putstr_fd("ls: ", 2);
+			perror(dc->name);
 			d->o->name++;
 		}
 		else
 		{
 			set_display(d, dc->stat, ft_strlen(dc->name), dc->type[0]);
-			ft_lstadd_back(&tmp, dc, sizeof(*dc));
+			sort_select(&tmp, dc, sizeof(*dc), d->o);
 		}
 		sort = sort->next;
 	}
-	sort_select(&tmp, d->o);
 	print_params(tmp, lst, d);
 }
 
@@ -95,7 +92,7 @@ void	sort_params(char **av, t_list **lst, t_options *o, t_display d)
 	{
 		if (lstat(av[i], &dc.stat) != 0 && !av[i][0])
 		{
-			ft_printf("ls: fts_open: ");
+			ft_putstr_fd("ls: fts_open: ", 2);
 			perror("");
 			exit(EXIT_FAILURE);
 		}
