@@ -6,7 +6,7 @@
 /*   By: qdegraev <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/08 01:52:30 by qdegraev          #+#    #+#             */
-/*   Updated: 2016/03/10 17:46:30 by qdegraev         ###   ########.fr       */
+/*   Updated: 2016/03/13 15:11:00 by qdegraev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ void	print_time(t_dircont *dc, t_display *d)
 	t = !d->o->u ? (dc->stat.st_mtimespec).tv_sec :
 		(dc->stat.st_atimespec).tv_sec;
 	st = ctime(&t);
-	if (d->o->T)
+	if (d->o->up_t)
 		ft_printf("%-.20s ", st + 4);
 	else if (time(NULL) - t >= 15778463 || t > time(NULL))
 	{

@@ -6,7 +6,7 @@
 /*   By: qdegraev <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/01 00:21:03 by qdegraev          #+#    #+#             */
-/*   Updated: 2016/03/11 15:34:59 by qdegraev         ###   ########.fr       */
+/*   Updated: 2016/03/13 15:08:28 by qdegraev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	print_dir(t_list *sort, t_list *lst, t_display *d)
 	tmp = NULL;
 	d->o->l_feed++ ? ft_printf("\n") : 0;
 	d->o->name++ ? ft_printf("%s:\n", lst->content) : 0;
-	!d->o->l || !sort  ? 0 : ft_printf("total %d\n", d->total);
+	!d->o->l || !sort ? 0 : ft_printf("total %d\n", d->total);
 	while (sort)
 	{
 		dc = sort->content;
@@ -74,7 +74,7 @@ void	stockdir(char *path, DIR *dir, t_list *lst, t_display d)
 	{
 		if (d.o->a || fich->d_name[0] != '.')
 		{
-			dc.path = ft_strcmp(path, "/") ? ft_strjoin(path, "/") : 
+			dc.path = ft_strcmp(path, "/") ? ft_strjoin(path, "/") :
 				ft_strdup(path);
 			dc.path = ft_cjoin(dc.path, ft_strdup(fich->d_name));
 			lstat(dc.path, &dc.stat);

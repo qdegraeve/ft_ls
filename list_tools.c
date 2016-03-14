@@ -6,7 +6,7 @@
 /*   By: qdegraev <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/01 00:18:26 by qdegraev          #+#    #+#             */
-/*   Updated: 2016/03/11 16:26:31 by qdegraev         ###   ########.fr       */
+/*   Updated: 2016/03/13 15:06:42 by qdegraev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int		sort_ascii(t_dircont *c1, void *c2, int o)
 	}
 }
 
-int sort_mod_time(t_dircont *c1, void *c2, int o)
+int		sort_mod_time(t_dircont *c1, void *c2, int o)
 {
 	long int	l1;
 	long int	l2;
@@ -59,18 +59,18 @@ int		sort_access_time(t_dircont *c1, void *c2, int o)
 	if (o)
 	{
 		if ((diff = c1->stat.st_atime - ((t_dircont*)c2)->stat.st_atime) == 0)
-				return (l1 != l2 ? (l1 - l2) : sort_ascii(c1, c2, o));
-			else
-				return (diff);
-		}
+			return (l1 != l2 ? (l1 - l2) : sort_ascii(c1, c2, o));
 		else
-		{
-			if ((diff = ((t_dircont*)c2)->stat.st_atime - c1->stat.st_atime) == 0)
-				return (l1 != l2 ? (l2 - l1) : sort_ascii(c1, c2, o));
-			else
-				return (diff);
-		}
+			return (diff);
 	}
+	else
+	{
+		if ((diff = ((t_dircont*)c2)->stat.st_atime - c1->stat.st_atime) == 0)
+			return (l1 != l2 ? (l2 - l1) : sort_ascii(c1, c2, o));
+		else
+			return (diff);
+	}
+}
 
 void	sort_list(t_list **dir, int o, int (*sort)(t_dircont *,
 			void *, int))

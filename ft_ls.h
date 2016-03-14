@@ -6,7 +6,7 @@
 /*   By: qdegraev <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/24 16:24:48 by qdegraev          #+#    #+#             */
-/*   Updated: 2016/03/11 15:37:41 by qdegraev         ###   ########.fr       */
+/*   Updated: 2016/03/13 15:09:14 by qdegraev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ typedef struct		s_options
 	char			a;
 	char			r;
 	char			t;
-	char			T;
+	char			up_t;
 	char			u;
 	char			one;
 	char			color;
